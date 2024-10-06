@@ -2,7 +2,7 @@
 
 services:
   - type: web
-    name: my-python-app
+    name: teipenn
     env: python
     plan: free
     runtime: python3.8 # 使用するPythonのバージョンを指定
