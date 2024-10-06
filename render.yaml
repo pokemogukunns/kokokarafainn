@@ -5,6 +5,6 @@ services:
     name: teipenn
     env: python
     plan: free
-    runtime: python3 # 使用するPythonのバージョンを指定
+    runtime: python
     startCommand: python youtube.py
     autoDeploy: true
