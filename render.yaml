@@ -1,11 +1,9 @@
-# render.yaml
-
 services:
   - type: web
     name: teipenn
     env: python
     plan: free
     runtime: python
-    buildCommand: pip install -r requirements.txt
+    buildCommand: pip install -r requirements.txt 
     startCommand: python youtube.py
     autoDeploy: true
