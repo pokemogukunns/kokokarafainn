@@ -40,5 +40,5 @@ def download():
         return f"エラーが発生しました: {e}"
         
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))  # Renderのポートを取得
+    port = int(os.environ.get("PORT", 5000))  # PORT環境変数を使用
     app.run(host='0.0.0.0', port=port)
