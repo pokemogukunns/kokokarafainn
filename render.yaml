@@ -5,5 +5,5 @@ services:
     plan: free
     runtime: python
     buildCommand: pip install -r requirements.txt 
-    startCommand: python youtube.py
+    startCommand: python youtube2.py
     autoDeploy: true
