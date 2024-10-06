@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
-from flask import Flask, request, render_template_string
-from pytube import YouTube
+import os
+from flask 
+import Flask, request, render_template_string
+from pytube 
+import YouTube
 
 app = Flask(__name__)
 
@@ -35,6 +38,7 @@ def download():
             return "動画のダウンロードが完了しました。"
     except Exception as e:
         return f"エラーが発生しました: {e}"
-
+        
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
+    port = int(os.environ.get("PORT", 5000))  # Renderのポートを取得
+    app.run(host='0.0.0.0', port=port)
