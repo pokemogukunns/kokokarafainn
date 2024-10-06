@@ -1,0 +1,10 @@
+# render.yaml
+
+services:
+  - type: web
+    name: my-python-app
+    env: python
+    plan: free
+    runtime: python3.8 # 使用するPythonのバージョンを指定
+    startCommand: python youtube.py
+    autoDeploy: true
