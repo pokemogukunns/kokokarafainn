@@ -1,54 +1,40 @@
 # -*- coding: utf-8 -*-
-
+from flask import Flask, request, render_template_string
 from pytube import YouTube
 
-# エラーメッセージ
-__ERROR_MESSAGE__ = None
+app = Flask(__name__)
 
-# YouTubeの動画をダウンロードする
-def get_youtube(y_url, download_location, audio_only_flg):
-    global __ERROR_MESSAGE
-    # 一旦エラーメッセージをクリア
-    __ERROR_MESSAGE = None
+@app.route('/')
+def index():
+    return render_template_string('''
+        <form action="/download" method="post">
+            <label for="url">YoutubeのURL:</label><br>
+            <input type="text" id="url" name="url"><br>
+            <label for="location">ダウンロード先のフォルダ（省略可）:</label><br>
+            <input type="text" id="location" name="location"><br>
+            <label for="audio">音声のみ:</label>
+            <input type="checkbox" id="audio" name="audio"><br>
+            <input type="submit" value="ダウンロード">
+        </form>
+    ''')
 
-    # URLの入力に関する例外処理
-    if type(y_url) != str or y_url == "":
-        __ERROR_MESSAGE = "URLには文字列を入れてください"
-        print(__ERROR_MESSAGE)
-        return
+@app.route('/download', methods=['POST'])
+def download():
+    y_url = request.form['url']
+    download_location = request.form['location'] or './'
+    audio_only_flg = 'audio' in request.form
 
-    # 「http://」が省略されて入れば付け加える
-    if not (y_url.startswith("https://") or y_url.startswith("https://")):
-        y_url = "https://" + y_url
-
-    # ダウンロード先フォルダが省略されて入れば、カレントディレクトリに設定
-    if download_location == "" or download_location is None:
-        download_location = "./"
-
-    # エラーメッセージが出ていなければ動画を取得する
+    # YouTube動画をダウンロードする関数
     try:
         youtube = YouTube(y_url)
-        # 動画をダウンロードするとき
-        if not audio_only_flg:
-            youtube.streams.filter(subtype='mp4').first().download(download_location)
-        # 音声をダウンロードするとき
-        else:
+        if audio_only_flg:
             youtube.streams.filter(only_audio=True, subtype='mp4').first().download(download_location)
-        print("ダウンロードが完了しました！")
+            return "音声のダウンロードが完了しました。"
+        else:
+            youtube.streams.filter(subtype='mp4').first().download(download_location)
+            return "動画のダウンロードが完了しました。"
     except Exception as e:
-        __ERROR_MESSAGE = str(e)
-        print(f"エラー: {__ERROR_MESSAGE}")
-
-def main():
-    print("Youtubeの動画をダウンロードします。")
-
-    # ユーザーからの入力を受け取る
-    y_url = input("YoutubeのURLを入力してください: ")
-    download_location = input("ダウンロード先のフォルダ（省略可）: ")
-    audio_only = input("音声のみをダウンロードしますか？ (y/n): ").lower() == 'y'
-
-    # YouTubeの動画をダウンロードする
-    get_youtube(y_url, download_location, audio_only)
+        return f"エラーが発生しました: {e}"
 
 if __name__ == "__main__":
-    main()
+    app.run(host='0.0.0.0', port=5000)
