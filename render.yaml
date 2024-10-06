@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: teipenn
+    name: teipenn2
     env: python
     plan: free
     runtime: python
